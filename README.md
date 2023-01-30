@@ -20,6 +20,7 @@ Main features:
 - data storage in `elasticsearch`
 - scraping results sent to callback url, used `pipedream.com` for testing
 - OOP where applicable
+- testing with `pytest`
 
 TODO:
 - support more e-commerce websites
@@ -101,7 +102,7 @@ at index page `/`
   }
 }
 ```
-### Pipedream callback
+### Pipedream callback payload
 `HTTP POST`
 ```json
 {

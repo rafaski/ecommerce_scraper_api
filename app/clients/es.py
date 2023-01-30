@@ -13,4 +13,4 @@ es_client = Elasticsearch(
 
 # TODO error handling
 # TODO check elasticsearch before scraping
-# TODO pytest
+# TODO type hints

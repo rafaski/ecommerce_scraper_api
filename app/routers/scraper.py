@@ -14,11 +14,3 @@ async def crawl(request: Request, url: str, callback_url: str) -> Output:
     run_crawler.apply_async(args=(url, callback_url), queue="test")
 
     return Output(success=True, message="Task accepted")
-
-
-# @router.get("/results")
-# async def results(request: Request) -> Output:
-#     """
-#     Get query results
-#     """
-#     return Output(success=True)
