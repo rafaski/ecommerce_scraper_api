@@ -1,8 +1,11 @@
 from bs4 import BeautifulSoup
 from collections import OrderedDict
+from elasticsearch import NotFoundError
 
+from app.enums import Indexes
 from app.schemas import Product
 from app.crawlers.base_crawler import Base
+from app.clients.es import es_client
 
 
 class Xkom:
@@ -33,6 +36,13 @@ class Xkom:
         """
         Scrape product data from website and save results to elasticsearch
         """
+        # check elasticsearch before scraping http request
+        try:
+            doc = es_client.get(index=Indexes.PROFILES_V2, id=url)
+            return doc.get("_source")
+        except NotFoundError:
+            pass
+
         # get a html text file
         response = Base().request(url=url, headers=self.headers)
 

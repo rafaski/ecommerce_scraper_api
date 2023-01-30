@@ -10,7 +10,3 @@ es_client = Elasticsearch(
     cloud_id=ELASTICSEARCH_CLOUD_ID,
     basic_auth=("elastic", ELASTICSEARCH_PASSWORD)
 )
-
-# TODO error handling
-# TODO check elasticsearch before scraping
-# TODO docker

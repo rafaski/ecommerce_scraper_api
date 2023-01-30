@@ -29,17 +29,21 @@ TODO:
 ### Supported e-commerce websites:
 `www.x-kom.pl`
 
-### Dependencies
-Dependency management is handled using `requirements.txt` file. 
+## Get started
+To run the API you will need connect to `elasticsearch`, we use `Elastic Cloud`.
+Get your `Elastic Cloud` credentials, create the `.env` file 
+(use the `.env.dist` for reference) and add the `ELASTICSEARCH_CLOUD_ID` and 
+`ELASTICSEARCH_PASSWORD` variables.
 
-### Docker setup
-TBA
+### Dependencies
+Dependency management is handled using `requirements.txt` file.
 
 ### Local setup
 1. Install dependencies from `requirements.txt` file
 2. Run redis server with `redis-cli`
 3. Run celery worker with `celery -A app.celery_app worker -Q test --pool=solo --loglevel=INFO`
 4. Run the app: `uvicorn app.main:app --reload`
+5. Hit /crawl endpoint with supported e-commerce website url and your callback url (`pipedream` used for testing)
 
 ## Documentation
 Once the application is up and running, you can access FastAPI automatic docs 
@@ -53,7 +57,7 @@ at index page `/`
 
 ## Examples
 ### Hit API endpoint
-`curl -X 'GET' 'http://127.0.0.1:8080/crawl?url={XKOM_URL}&callback_url={PIPEDREAM_CALLBACK_URL}' \
+`curl -X 'GET' 'http://127.0.0.1:8080/crawl?url={XKOM_URL}&callback_url={CALLBACK_URL}' \
   -H 'accept: application/json'`
 
 ### API response
