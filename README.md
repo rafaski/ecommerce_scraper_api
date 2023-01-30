@@ -24,7 +24,6 @@ Main features:
 
 TODO:
 - support more e-commerce websites
-- custom error handling
 
 ### Supported e-commerce websites:
 `www.x-kom.pl`
