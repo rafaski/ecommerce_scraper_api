@@ -4,7 +4,7 @@ for production use.
 
 ## Overview
 This is a web scraper API that provides product information from supported 
-e-commerce websites. Web crawling runs as a `celery` task, data parsing 
+e-commerce websites. Web crawlers run as `celery` tasks, data parsing 
 is stored in `elasticsearch`. Results are sent to a callback url.
 
 ### Motives
