@@ -1,29 +1,23 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
-
-
-class Price(BaseModel):
-    """
-    TBA
-    """
-    amount: int
-    currency: str
 
 
 class Product(BaseModel):
     """
-    TBA
+    Product schema
     """
     name: str
-    # price: Price
+    price: int
+    currency: str
     review_count: int
-    # average_rating: float
+    average_rating: float
+    reviews: List[str]
     url: str
 
 
 class Output(BaseModel):
     """
-    TBA
+    Output schema
     """
     success: bool
     message: Optional[str] = None

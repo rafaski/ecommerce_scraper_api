@@ -1,15 +1,15 @@
 from bs4 import BeautifulSoup
 from collections import OrderedDict
-import requests
 
 from app.schemas import Product
-from app.clients.es import es_client
+from app.crawlers.base_crawler import Base
 
 
 class Xkom:
     """
-    TBA
+    A crawler class that supports product data scraping from x-kom.pl domain
     """
+
     headers = {
         "Accept": (
             "text/html,application/xhtml+xml,application/xml;q=0.9,"
@@ -29,39 +29,42 @@ class Xkom:
     }
     headers = OrderedDict(headers)
 
-    def request(self, url: str):
-        response = requests.get(url=url, headers=self.headers).text
-        return response
-
     def parse(self, url: str):
-        response = self.request(url=url)
+        """
+        Scrape product data from website and save results to elasticsearch
+        """
+        # get a html text file
+        response = Base().request(url=url, headers=self.headers)
 
         doc = BeautifulSoup(response, "html.parser")
+
+        # extract data from response
         name = doc.find(class_="sc-1bker4h-4 hMQkuz").text
-        price = doc.find(class_="sc-n4n86h-4 jwVRpW").text
+        price_currency_str = doc.find(class_="sc-n4n86h-4 jwVRpW").text
+        price = int(price_currency_str.split(",")[0].replace(" ", ""))
+        currency = price_currency_str.split(" ")[-1][-2:]
+        average_rating = doc.find(
+            class_="sc-1h16fat-0 sc-1ngc1lj-1 eKEFnB sc-1bker4h-6 gDIfGT"
+        )
+        average_rating = float(average_rating["title"][-4:])
         review_count = doc.find(class_="sc-1ngc1lj-2 eJPDue").text
         review_count = int(review_count.split(" ")[0][1:])
+        all_reviews = doc.find_all(
+            class_="sc-u1peis-1 etZjkD sc-s2qgtg-21 gIUavP"
+        )
+        reviews = []
+        for review in all_reviews:
+            reviews.append(review.text)
 
         product = Product(
             name=name,
+            price=price,
+            currency=currency,
             review_count=review_count,
+            average_rating=average_rating,
+            reviews=reviews,
             url=url
         )
-        self.save(product=product)
+        Base().save(product=product)
 
         return product.dict()
-
-    @staticmethod
-    def save(product: Product):
-
-        es_client.index(
-            index="profiles-v1",
-            id=product.url,
-            document=product.dict()
-        )
-
-    # TODO proper schema, error handling, abstract methods into Base class,
-    # TODO check elasticsearch before scraping, move into settings
-    # TODO pytest
-
-

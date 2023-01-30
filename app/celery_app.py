@@ -4,6 +4,10 @@ import requests
 
 from app.utils import get_host
 
+"""
+Create a celery app, queue and tasks
+"""
+
 celery_app = Celery(main="celery_app")
 celery_app.conf.task_default_queue = "test"
 celery_app.conf.broker_url = "redis://localhost:6379/0"
@@ -12,6 +16,11 @@ celery_app.conf.result_backend = "redis://localhost:6379/0"
 
 @celery_app.task
 def run_crawler(url: str, callback_url: str):
+    """
+    Identify url host name, import, import module with a corresponding crawler
+    based on supported host name, run a crawler (parse data from url),
+    send payload (extracted data by crawler) to client's callback url.
+    """
     host = get_host(url=url)
     module = import_module(name=f"app.crawlers.{host}")
     crawler = getattr(module, host.capitalize())
@@ -20,4 +29,7 @@ def run_crawler(url: str, callback_url: str):
 
 
 def send_callback(url: str, payload: dict):
+    """
+    Send payload (extracted data by crawler) to client's callback url.
+    """
     requests.post(url=url, data=payload)

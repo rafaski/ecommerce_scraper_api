@@ -9,7 +9,7 @@ router = APIRouter()
 @router.get("/crawl")
 async def crawl(request: Request, url: str, callback_url: str) -> Output:
     """
-    Request review data
+    Create a data scraping task. Provide supported product url and callback url.
     """
     run_crawler.apply_async(args=(url, callback_url), queue="test")
 

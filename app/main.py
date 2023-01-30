@@ -5,9 +5,7 @@ from app.routers.scraper import router as scraper_router
 description = """
 ## Ecommerce Scraper API ##
 
-An E-commerce scraper allows you to scrape business info from google reviews.
-
-...
+An E-commerce scraper allows you to scrape product data from supported websites.
 """
 
 app = FastAPI(
