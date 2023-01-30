@@ -29,7 +29,7 @@ class Xkom:
     }
     headers = OrderedDict(headers)
 
-    def parse(self, url: str):
+    def parse(self, url: str) -> dict:
         """
         Scrape product data from website and save results to elasticsearch
         """

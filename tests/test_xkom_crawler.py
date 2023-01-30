@@ -9,7 +9,7 @@ PRICE = 6999
 CURRENCY = "zł"
 
 
-def test_xkom_crawler():
+def test_xkom_crawler() -> None:
     """
     Test xkom product scraped data with expected result.
     """

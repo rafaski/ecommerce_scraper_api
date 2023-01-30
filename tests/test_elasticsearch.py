@@ -8,7 +8,7 @@ URL = (
 INDEX = "profiles-v2"
 
 
-def test_es():
+def test_es() -> None:
     """
     Test elasticsearch
     """

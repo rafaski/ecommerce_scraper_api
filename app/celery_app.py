@@ -15,7 +15,7 @@ celery_app.conf.result_backend = "redis://localhost:6379/0"
 
 
 @celery_app.task
-def run_crawler(url: str, callback_url: str):
+def run_crawler(url: str, callback_url: str) -> None:
     """
     Identify url host name, import, import module with a corresponding crawler
     based on supported host name, run a crawler (parse data from url),
@@ -28,7 +28,7 @@ def run_crawler(url: str, callback_url: str):
     send_callback(url=callback_url, payload=result)
 
 
-def send_callback(url: str, payload: dict):
+def send_callback(url: str, payload: dict) -> None:
     """
     Send payload (extracted data by crawler) to client's callback url.
     """

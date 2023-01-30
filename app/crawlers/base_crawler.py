@@ -9,7 +9,7 @@ class Base:
     Base class for all crawlers
     """
 
-    def request(self, url: str, headers: dict):
+    def request(self, url: str, headers: dict) -> str:
         """
         HTTP request method
         """
@@ -17,7 +17,7 @@ class Base:
         return response
 
     @staticmethod
-    def save(product: Product):
+    def save(product: Product) -> None:
         """
         Save results to elastic search
         """
@@ -28,7 +28,7 @@ class Base:
         )
 
     # Create an index with an explicit mapping in elasticsearch API console
-    es_index = {
+    elasticsearch_index_format = {
         "mappings": {
             "properties": {
                 "name": {"type": "keyword"},

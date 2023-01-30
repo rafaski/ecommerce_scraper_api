@@ -1,7 +1,7 @@
 import tldextract
 
 
-def get_host(url: str):
+def get_host(url: str) -> str:
     """
     Util function that returns url domain as string
     """
