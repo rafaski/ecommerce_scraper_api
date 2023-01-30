@@ -32,6 +32,7 @@ TODO:
 Dependency management is handled using `requirements.txt` file. 
 
 ### Docker setup
+TBA
 
 ### Local setup
 1. Install dependencies from `requirements.txt` file
@@ -50,13 +51,11 @@ at index page `/`
 
 
 ## Examples
-
-### elastic search result
-hit FastAPI endpoint
+### Hit API endpoint
 `curl -X 'GET' 'http://127.0.0.1:8080/crawl?url={XKOM_URL}&callback_url={PIPEDREAM_CALLBACK_URL}' \
   -H 'accept: application/json'`
 
-FastAPI response
+### API response
 ```json
 {
   "success": true,
@@ -64,7 +63,7 @@ FastAPI response
   "result": null
 }
 ```
-elasticsearch API console
+### Elasticsearch API console
 `GET /profiles-v2/_search`
 ```json
 {
@@ -102,7 +101,7 @@ elasticsearch API console
   }
 }
 ```
-Pipedream callback
+### Pipedream callback
 `HTTP POST`
 ```json
 {
