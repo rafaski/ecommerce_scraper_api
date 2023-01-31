@@ -33,7 +33,9 @@ def send_callback(url: str, payload: dict) -> None:
     """
     Send payload (extracted data by crawler) to client's callback url.
     """
-    requests.post(url=url, data=payload)
+    try:
+        requests.post(url=url, data=payload)
+    except (requests.exceptions.InvalidURL, requests.HTTPError):
+        raise
 
-    # TODO error handling - what if provided callback is invalid? What if the server returns 403? Etc.
     # TODO Create a Celery task out of this function and enqueue that into a separate queue called callbacks

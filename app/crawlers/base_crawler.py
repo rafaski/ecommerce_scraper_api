@@ -43,7 +43,7 @@ class Base:
         headers.update(self.headers)
         try:
             response = requests.get(url=url, headers=self.headers).text
-        except requests.ConnectionError:
+        except requests.RequestException:
             raise
         return response
 
