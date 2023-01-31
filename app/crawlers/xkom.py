@@ -13,25 +13,9 @@ class Xkom(Base):
     A crawler class that supports product data scraping from x-kom.pl domain
     """
 
-    headers = OrderedDict({
-        "Accept": (
-            "text/html,application/xhtml+xml,application/xml;q=0.9,"
-            "image/avif,image/webp,*/*;q=0.8"
-        ),
-        "Accept-Encoding": "gzip, deflate, utf-8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive",
-        "DNT": "1",
-        "Host": "www.x-kom.pl",
-        "Upgrade-Insecure-Requests": "1",
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) "
-            "Gecko/20100101 Firefox/110.0"
-        )
+    headers_ = OrderedDict({
+        "Host": "www.x-kom.pl"
     })
-    # TODO rotate user-agent
-    # TODO https://medium.com/geekculture/rotate-ip-address-and-user-agent-to-scrape-data-a010216c8d0c
 
     def parse(self, url: str) -> dict:
         """
@@ -45,9 +29,10 @@ class Xkom(Base):
             pass
 
         # get a html text file
-        response = self.request(url=url, headers=self.headers)
+        response = self.request(url=url, headers=self.headers_)
         
-        # TODO error handling for bs
+        # TODO error handling for BS
+
         doc = BeautifulSoup(response, "html.parser")
 
         # extract data from response
