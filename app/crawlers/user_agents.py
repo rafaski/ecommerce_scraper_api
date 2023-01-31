@@ -21,4 +21,3 @@ AGENT_LIST = [
         "Gecko/20100101 Firefox/77.0"
     )
 ]
-user_agent = random.choice(agent_list)
