@@ -114,7 +114,9 @@ GET /profiles-v2/_search
 }
 ```
 ### Pipedream callback payload
-`HTTP POST`
+```shell
+HTTP POST
+```
 ```json
 {
   "body": {
