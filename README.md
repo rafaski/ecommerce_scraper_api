@@ -4,8 +4,8 @@ for production use.
 
 ## Overview
 This is a web scraper API that provides product information from supported 
-e-commerce websites. Web crawlers run as `celery` tasks, data parsing 
-is stored in `elasticsearch`. Results are sent to a callback url.
+e-commerce websites. Web crawlers run as `celery` tasks, parsed data is stored 
+in `elasticsearch`. Results are sent to a callback url.
 
 ### Motives
 The main reason for creating this application was to practice web scraping, 
@@ -14,7 +14,7 @@ explore `celery` and `elasticsearch`
 Main features:
 - FastAPI framework
 - HTTP requests using `requests` library
-- Web scraping with `beautifulsoup`
+- Data extraction with `beautifulsoup`
 - Distributed task queuing with `celery`
 - `redis` as a message broker for `celery` app
 - data storage in `elasticsearch`
@@ -34,15 +34,19 @@ Get your `Elastic Cloud` credentials, create the `.env` file
 (use the `.env.dist` for reference) and add the `ELASTICSEARCH_CLOUD_ID` and 
 `ELASTICSEARCH_PASSWORD` variables.
 
+### Authentication
+To authenticate incoming requests, we check the `api_key` header.
+Create the `.env` file (use the `.env.dist` for reference) 
+and add `API_KEY` to environment variables.
+
 ### Dependencies
 Dependency management is handled using `requirements.txt` file.
 
 ### Local setup
 1. Install dependencies from `requirements.txt` file
 2. Run redis server with `redis-cli`
-3. Run celery worker with `celery -A app.celery_app worker -Q test --pool=solo --loglevel=INFO`
+3. Run celery worker with `celery -A app.celery_app worker -Q crawling --pool=solo --loglevel=INFO`
 4. Run the app: `uvicorn app.main:app --reload`
-5. Hit /crawl endpoint with supported e-commerce website url and your callback url (`pipedream` used for testing)
 
 ## Documentation
 Once the application is up and running, you can access FastAPI automatic docs 
@@ -56,8 +60,9 @@ at index page `/`
 
 ## Examples
 ### Hit API endpoint
-`curl -X 'GET' 'http://127.0.0.1:8080/crawl?url={XKOM_URL}&callback_url={CALLBACK_URL}' \
-  -H 'accept: application/json'`
+```shell
+curl -X 'GET' 'http://127.0.0.1:8080/crawl?url={XKOM_URL}&callback_url={CALLBACK_URL}' -H 'accept: application/json'
+  ```
 
 ### API response
 ```json
@@ -68,7 +73,9 @@ at index page `/`
 }
 ```
 ### Elasticsearch API console
-`GET /profiles-v2/_search`
+```shell
+GET /profiles-v2/_search
+````
 ```json
 {
   "hits": {
@@ -82,6 +89,7 @@ at index page `/`
           "average_rating": 5.91,
           "url": "https://www.x-kom.pl/p/1054822-notebook-laptop-133-apple-macbook-air-m2-16gb-256-mac-os-midnight.html#Specyfikacja",
           "price": 6999,
+          "currency": "zł",
           "reviews": [
             "Mam ten komp tylko z dyskiem 1TB, - to jest bestia. Używam do fullstack developmentu, masa apek, docker, jetbrains rider + webstorm, nodejs, .net core, teamsy, dsiesiątki tabów w chrome, parallels z win11 - żadnego problemu. CPU temp na poziomie 35 - 50C, przeważnie 35C, 50 osiąga przy indeksacji projektu albo ładowaniu win11 - wszystko jest mega szybkie. Tak powinien wyglądać sprzęt przyszłości. Nigdy więcej kompów z wiatrakami.... Rozwiń dalej",
             "Żona zadowolona a szczęśliwa kobieta to możliwość wyjścia z kumplami na piwo.... Rozwiń dalej",

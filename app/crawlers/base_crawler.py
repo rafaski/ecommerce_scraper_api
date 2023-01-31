@@ -34,19 +34,3 @@ class Base:
             )
         except (TransportError, ConnectionError):
             raise
-
-    # Create an index with an explicit mapping in elasticsearch API console
-    elasticsearch_index_format = {
-        "mappings": {
-            "properties": {
-                "name": {"type": "keyword"},
-                "price": {"type": "integer"},
-                "currency": {"type": "text"},
-                "review_count": {"type": "integer"},
-                "average_rating": {"type": "float"},
-                "email": {"type": "keyword"},
-                "reviews": {"type": "text"},
-                "url": {"type": "text"}
-            }
-        }
-    }

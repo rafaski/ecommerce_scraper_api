@@ -8,12 +8,12 @@ from app.crawlers.base_crawler import Base
 from app.clients.es import es_client
 
 
-class Xkom:
+class Xkom(Base):
     """
     A crawler class that supports product data scraping from x-kom.pl domain
     """
 
-    headers = {
+    headers = OrderedDict({
         "Accept": (
             "text/html,application/xhtml+xml,application/xml;q=0.9,"
             "image/avif,image/webp,*/*;q=0.8"
@@ -29,8 +29,9 @@ class Xkom:
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) "
             "Gecko/20100101 Firefox/110.0"
         )
-    }
-    headers = OrderedDict(headers)
+    })
+    # TODO rotate user-agent
+    # TODO https://medium.com/geekculture/rotate-ip-address-and-user-agent-to-scrape-data-a010216c8d0c
 
     def parse(self, url: str) -> dict:
         """
@@ -44,8 +45,9 @@ class Xkom:
             pass
 
         # get a html text file
-        response = Base().request(url=url, headers=self.headers)
-
+        response = self.request(url=url, headers=self.headers)
+        
+        # TODO error handling for bs
         doc = BeautifulSoup(response, "html.parser")
 
         # extract data from response
@@ -75,6 +77,6 @@ class Xkom:
             reviews=reviews,
             url=url
         )
-        Base().save(product=product)
+        self.save(product=product)
 
         return product.dict()

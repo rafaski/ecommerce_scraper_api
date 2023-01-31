@@ -3,15 +3,16 @@ from importlib import import_module
 import requests
 
 from app.utils import get_host
+from app.settings import BROKER_URL, RESULT_BACKEND, TASK_DEFAULT_QUEUE
 
 """
 Create a celery app, queue and tasks
 """
 
 celery_app = Celery(main="celery_app")
-celery_app.conf.task_default_queue = "test"
-celery_app.conf.broker_url = "redis://localhost:6379/0"
-celery_app.conf.result_backend = "redis://localhost:6379/0"
+celery_app.conf.task_default_queue = TASK_DEFAULT_QUEUE
+celery_app.conf.broker_url = BROKER_URL
+celery_app.conf.result_backend = RESULT_BACKEND
 
 
 @celery_app.task
@@ -33,3 +34,6 @@ def send_callback(url: str, payload: dict) -> None:
     Send payload (extracted data by crawler) to client's callback url.
     """
     requests.post(url=url, data=payload)
+
+    # TODO error handling - what if provided callback is invalid? What if the server returns 403? Etc.
+    # TODO Create a Celery task out of this function and enqueue that into a separate queue called callbacks
