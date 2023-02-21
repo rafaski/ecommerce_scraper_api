@@ -18,7 +18,7 @@ celery_app.conf.result_backend = RESULT_BACKEND
 @celery_app.task
 def run_crawler(url: str, callback_url: str) -> None:
     """
-    Identify url host name, import, import module with a corresponding crawler
+    Identify url host name, import module with a corresponding crawler
     based on supported host name, run a crawler (parse data from url),
     send payload (extracted data by crawler) to client's callback url.
     """

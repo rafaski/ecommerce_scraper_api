@@ -1,9 +1,12 @@
+from typing import List
+
 from bs4 import BeautifulSoup
 from collections import OrderedDict
 from elasticsearch import NotFoundError
+from datetime import datetime
 
 from app.enums import Indexes
-from app.schemas import Product
+from app.schemas import Product, Review
 from app.crawlers.base_crawler import Base
 from app.clients.es import es_client
 
@@ -22,16 +25,14 @@ class Xkom(Base):
         Scrape product data from website and save results to elasticsearch
         """
         # check elasticsearch before scraping http request
-        try:
-            doc = es_client.get(index=Indexes.PROFILES_V2, id=url)
-            return doc.get("_source")
-        except NotFoundError:
-            pass
+        # try:
+        #     doc = es_client.get(index=Indexes.PROFILES_V2, id=url)
+        #     return doc.get("_source")
+        # except NotFoundError:
+        #     pass
 
         # get a html text file
         response = self.request(url=url, headers=self.headers_)
-        
-        # TODO error handling for BS
 
         doc = BeautifulSoup(response, "html.parser")
 
@@ -47,11 +48,20 @@ class Xkom(Base):
         review_count = doc.find(class_="sc-1ngc1lj-2 eJPDue").text
         review_count = int(review_count.split(" ")[0][1:])
         all_reviews = doc.find_all(
-            class_="sc-u1peis-1 etZjkD sc-s2qgtg-21 gIUavP"
+            class_="sc-1s1zksu-0 sc-1s1zksu-1 hHQkLn sc-s2qgtg-20 hTjidB"
         )
-        reviews = []
-        for review in all_reviews:
-            reviews.append(review.text)
+        reviews: List[Review] = []
+        for item in all_reviews:
+            reviewer = item.find(class_="sc-s2qgtg-0 kZKWrI").text
+            date = item.find(class_="sc-s2qgtg-10 ia-ddoT").get("title")
+            date = datetime.strptime(date, '%d-%m-%Y | %H:%M')
+            # review = item.find(
+            #     class_="sc-u1peis-1 jlprMD sc-s2qgtg-21 gIUavP"
+            # )
+            # review = item.text
+            # print(review)
+            print(item.find(class_="sc-1s1zksu-0 eCLbtN sc-s2qgtg-19 fBPzZG").findChildren())
+            # reviews.append(Review(name=reviewer, date=date, review=review))
 
         product = Product(
             name=name,
@@ -62,6 +72,47 @@ class Xkom(Base):
             reviews=reviews,
             url=url
         )
-        self.save(product=product)
-
+        # self.save(product=product)
+        from pprint import pprint
+        pprint(product.dict())
         return product.dict()
+
+
+from pprint import pprint
+var = Xkom().parse(url="https://www.x-kom.pl/p/1054822-notebook-laptop-133-apple-macbook-air-m2-16gb-256-mac-os-midnight.html#Specyfikacja")
+pprint(var)
+
+
+profile = {
+  "profiles-v3": {
+    "mappings": {
+      "properties": {
+        "review_count": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "keyword"
+        },
+        "currency": {
+          "type": "text"
+        },
+        "url": {
+          "type": "text"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "reviews": {
+          "type": "text"
+        },
+        "average_rating": {
+          "type": "float"
+        },
+        "email": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
+
