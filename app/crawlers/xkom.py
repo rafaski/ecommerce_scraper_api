@@ -60,7 +60,9 @@ class Xkom(Base):
             # )
             # review = item.text
             # print(review)
-            print(item.find(class_="sc-1s1zksu-0 eCLbtN sc-s2qgtg-19 fBPzZG").findChildren())
+            print(item.find(
+                class_="sc-1s1zksu-0 eCLbtN sc-s2qgtg-19 fBPzZG").findChildren()
+                  )
             # reviews.append(Review(name=reviewer, date=date, review=review))
 
         product = Product(
@@ -78,11 +80,7 @@ class Xkom(Base):
         return product.dict()
 
 
-from pprint import pprint
-var = Xkom().parse(url="https://www.x-kom.pl/p/1054822-notebook-laptop-133-apple-macbook-air-m2-16gb-256-mac-os-midnight.html#Specyfikacja")
-pprint(var)
-
-
+# elasticsearch profile
 profile = {
   "profiles-v3": {
     "mappings": {
